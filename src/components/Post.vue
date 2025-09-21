@@ -3,9 +3,15 @@ import { reactive, ref, onMounted, computed } from 'vue'
 
 
 const props = defineProps({
-    id: Number,
+    postid: Number,
     title: String,
-    body: String
+    body: String,
+    post: Object
+})
+
+
+const thumbnail = computed(() => {
+    return `https://picsum.photos/id/${props.postid}/280/180`
 })
 
 const title = defineModel('title')
@@ -25,7 +31,10 @@ function toggleModal() {
 
 <template>
     <article @click="toggleModal">
-        <header>{{ props.title }}</header>
+        <header>
+            <img :src="thumbnail" alt="" />
+        </header>
+        <h3>{{ props.title }}</h3>
         {{ props.body }}
     </article>
 
@@ -68,5 +77,15 @@ function toggleModal() {
     }
     input, textarea {
         color: #fff;
+    }
+    article {
+        width: 100%;
+    }
+    article header img {
+        width: calc(100% + 2 + var(--pico-block-spacing-horizontal));
+        max-width: none;
+        height: auto;
+        margin: calc(var(--pico-block-spacing-vertical) * -1);
+        margin-bottom: 1rem;
     }
 </style>

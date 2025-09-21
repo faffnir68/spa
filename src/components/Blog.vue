@@ -1,5 +1,6 @@
 <script setup>
 import Post from './Post.vue'
+import Grid from './Grid.vue'
 
 import { reactive, ref, onMounted, computed } from 'vue'
 
@@ -20,12 +21,14 @@ onMounted(async () => {
     finally {
         loading.value = false
     }
-    console.log(posts)
 })
 
 const filteredPosts = computed(() => {
     return posts.value.filter(post => post.id <= 5)
 })
+
+
+
 
 </script>
 
@@ -33,11 +36,12 @@ const filteredPosts = computed(() => {
     <div class="container">
         <h2>Blog</h2>
         <div v-if="loading">Loading....</div>
-        <ul v-if="posts">
-            <li v-for="(post, index) in filteredPosts" :key="post.id">
-                <Post :title="post.title" :body="post.body" v-model:title="post.title" @update:content="value => post.body = value" />
-            </li>
-        </ul>
+        <Grid v-if="posts" :width="100">
+            <div v-for="(post, index) in filteredPosts" :key="post.id">
+                <Post :post="post" :postid="post.id" :title="post.title" :body="post.body" v-model:title="post.title" @update:content="value => post.body = value" />
+            </div>
+        </Grid>
+        <button>Page suivante</button>
     </div>
 </template>
 
