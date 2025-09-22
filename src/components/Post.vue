@@ -1,62 +1,35 @@
 <script setup>
 import { reactive, ref, onMounted, computed } from 'vue'
+import Article from './Article.vue'
 
 
 const props = defineProps({
     postid: Number,
     title: String,
     body: String,
-    post: Object
+    post: Object,
 })
 
+const title = defineModel('title')
 
 const thumbnail = computed(() => {
     return `https://picsum.photos/id/${props.postid}/280/180`
 })
 
-const title = defineModel('title')
-
-const emit = defineEmits(['update:content'])
-const updateBody = (e) => {
-    emit('update:content', e.target.value)
-}
-
-const open = ref(false)
-
-function toggleModal() {
-    open.value === false ? open.value = true : open.value = false
-}
+const emit = defineEmits(['update:body'])
 
 </script>
 
 <template>
-    <article @click="toggleModal">
-        <header>
-            <img :src="thumbnail" alt="" />
-        </header>
-        <h3>{{ props.title }}</h3>
-        {{ props.body }}
-    </article>
-
-    <Teleport to="body">
-        <div v-if="open" class="modal">
-            <fieldset>
-                <label>
-                Title
-                <input
-                    name="title"
-                    v-model="title"
-                />
-                </label>
-                <label>
-                Content
-                <textarea name="body" id="" :value="props.body" @input="updateBody"></textarea>
-                </label>
-            </fieldset>
-            <button @click="toggleModal">Close</button>
-        </div>
-    </Teleport>
-
+    <a :href="`#post:${props.postid}`">
+    <Article
+      :postid="props.postid"
+      v-model:title="title"
+      :body="props.body"
+      :thumbnail="thumbnail"
+      @update:body="val => emit('update:body', val)"
+    />
+    </a>
 </template>
 
 <style scoped>

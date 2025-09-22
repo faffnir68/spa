@@ -8,6 +8,7 @@ const posts = ref([])
 const loading = ref(false)
 const page = ref(1)
 
+
 watch(page, async (p) => {
     try {
         loading.value = true
@@ -39,7 +40,7 @@ const filteredPosts = computed(() => {
         <div v-if="loading">Loading....</div>
         <Grid v-if="posts" :width="100">
             <div v-for="(post, index) in posts" :key="post.id">
-                <Post :post="post" :postid="post.id" :title="post.title" :body="post.body" v-model:title="post.title" @update:content="value => post.body = value" />
+                <Post :post="post" :postid="post.id" :title="post.title" :body="post.body" v-model:title="post.title" @update:body="value => post.body = value" />
             </div>
         </Grid>
         <div class="pagination">
