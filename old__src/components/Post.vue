@@ -18,17 +18,28 @@ const thumbnail = computed(() => {
 
 const emit = defineEmits(['update:body'])
 
+const link = computed(() => {
+    return `#post:${props.postid}`
+})
+
 </script>
 
 <template>
-    <a :href="`#post:${props.postid}`">
-    <Article
+    <a :href="link">
+    <!-- <Article
       :postid="props.postid"
       v-model:title="title"
       :body="props.body"
       :thumbnail="thumbnail"
       @update:body="val => emit('update:body', val)"
-    />
+    /> -->
+    <article @click="toggleModal">
+        <header>
+            <img :src="thumbnail" alt="" />
+        </header>
+        <h3>{{ title }}</h3>
+        {{ body }}
+    </article>
     </a>
 </template>
 

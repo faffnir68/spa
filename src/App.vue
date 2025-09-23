@@ -1,24 +1,29 @@
-<script setup>
-import usePage from './composable/usePage'
-import Header from './components/Header.vue'
-import Home from './components/Home.vue'
-import Blog from './components/Blog.vue'
-import Contact from './components/Contact.vue'
-import NotFound from './components/NotFound.vue'
-import Article from './components/Article.vue'
-
-const { page } = usePage()
-</script>
-
 <template>
-  <Header />
-  <Blog v-if="page === 'blog'" />
-  <Contact v-else-if="page === 'contact'" />
-  <Article v-else-if="page === 'post'" />
-  <Home v-else-if="page === 'home' || page === ''" />
-  <NotFound v-else />
+    <Header />
+    <div class="container">
+        <ContactPage v-if="page === 'contact'" />
+        <BlogPage v-else-if="page === 'blog'" />
+        <HomePage v-else-if="page === ''" />
+        <SinglePage v-else-if="page === 'post'" :id="param" />
+        <NotFoundPage v-else />
+    </div>
 </template>
 
-<style scoped>
+<script setup>
+import Header from './components/Header.vue';
+import HomePage from './pages/HomePage.vue';
+import ContactPage from './pages/ContactPage.vue'
+import BlogPage from './pages/BlogPage.vue'
+import NotFoundPage from './pages/NotFoundPage.vue'
+import { usePage } from './composable/usePage.js';
+import SinglePage from './pages/SinglePage.vue';
 
+const { page, param } = usePage()
+</script>
+
+<style>
+.container {
+    padding-top: 2rem;
+    max-width: calc(100vw - 4rem);
+}
 </style>

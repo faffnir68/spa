@@ -1,11 +1,5 @@
-<template>
-    <div class="grid" :style="style">
-        <slot></slot>
-    </div>
-</template>
-
 <script setup>
-import { computed } from 'vue';
+import { computed } from 'vue'
 
 const props = defineProps({
     width: {
@@ -18,14 +12,19 @@ const style = computed(() => ({
 }))
 </script>
 
+<template>
+    <div class="grid" :style="style">
+        <slot></slot>
+    </div>
+</template>
+
 <style>
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(var(--width), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(var(--width), 1fr));
     gap: 1rem;
 }
-
-.grid>* {
+.grid > * {
     margin: 0;
 }
 </style>

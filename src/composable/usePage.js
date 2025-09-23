@@ -1,19 +1,32 @@
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref } from "vue";
 
-export default function usePage() {
-    const page = ref('')
-    const id = ref('')
+export function usePage() {
+  const hash = parseHash();
+  const page = ref(hash[0]);
+  const param = ref(hash[1]);
 
-    window.addEventListener('hashchange', () => {
-        page.value = window.location.hash.replace('#', '')
-        if(page.value.startsWith('post')) {
-            page.value = 'post'
-            if(Number.isInteger(parseInt(page.value.slice(-1)))) {
-                id.value = page.value.slice(-1)
-            }
-        }
-    })
+  let removeListener;
 
+  onMounted(() => {
+    const listener = () => {
+      [page.value, param.value] = parseHash();
+    };
+    window.addEventListener("hashchange", listener);
+    removeListener = () => {
+      window.removeEventListener("hashchange", listener);
+    };
+  });
 
-    return { page, id }
+  onUnmounted(() => {
+    removeListener();
+  });
+
+  return {
+    page,
+    param,
+  };
+}
+
+function parseHash() {
+  return window.location.hash.replace("#", "").split(":");
 }

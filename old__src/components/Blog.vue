@@ -3,34 +3,11 @@ import Post from './Post.vue'
 import Grid from './Grid.vue'
 
 import { reactive, ref, onMounted, computed, watch } from 'vue'
+import useFetch from '../composable/useFetch'
 
-const posts = ref([])
-const loading = ref(false)
 const page = ref(1)
 
-
-watch(page, async (p) => {
-    try {
-        loading.value = true
-        posts.value = []
-        const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=5&_page=' + p)
-        if(!response.ok) throw new Error('Failed to fetch data')
-        const data = await response.json()
-        posts.value = data
-    }
-    catch(error) {
-        console.log('Error : ' + error)
-    }
-    finally {
-        loading.value = false
-    }
-}, { immediate: true })
-
-const filteredPosts = computed(() => {
-    return posts.value
-})
-
-
+const { loading, data: posts } = useFetch(computed(() => `https://jsonplaceholder.typicode.com/posts?_limit=5&_page=${page.value}`))
 
 </script>
 
